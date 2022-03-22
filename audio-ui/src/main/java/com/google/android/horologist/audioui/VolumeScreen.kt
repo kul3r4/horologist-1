@@ -111,7 +111,6 @@ internal fun VolumeScreen(
     focusRequester: FocusRequester = remember { FocusRequester() },
     scrollableState: ScrollableState? = null
 ) {
-
     Box(
         modifier = modifier.fillMaxSize().run {
             if (scrollableState != null) {
