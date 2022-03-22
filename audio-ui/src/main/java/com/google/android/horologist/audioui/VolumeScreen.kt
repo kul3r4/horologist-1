@@ -88,7 +88,7 @@ public fun VolumeScreen(
 
     VolumeScreen(
         modifier = modifier,
-        volume = volumeState,
+        volume = { volumeState },
         audioOutput = audioOutput,
         increaseVolume = { volumeViewModel.increaseVolume() },
         decreaseVolume = { volumeViewModel.decreaseVolume() },
@@ -102,7 +102,7 @@ public fun VolumeScreen(
 @Composable
 internal fun VolumeScreen(
     modifier: Modifier = Modifier,
-    volume: VolumeState,
+    volume: () -> VolumeState,
     audioOutput: AudioOutput,
     increaseVolume: () -> Unit,
     decreaseVolume: () -> Unit,
@@ -132,10 +132,10 @@ internal fun VolumeScreen(
     ) {
         Stepper(
             modifier = modifier,
-            value = volume.current.toFloat(),
-            onValueChange = { if (it > volume.current) increaseVolume() else decreaseVolume() },
-            steps = volume.max - 1,
-            valueRange = (0f..volume.max.toFloat()),
+            value = volume().current.toFloat(),
+            onValueChange = { if (it > volume().current) increaseVolume() else decreaseVolume() },
+            steps = volume().max - 1,
+            valueRange = (0f..volume().max.toFloat()),
             increaseIcon = {
                 Icon(
                     modifier = Modifier
