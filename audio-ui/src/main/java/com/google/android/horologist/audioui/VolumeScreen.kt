@@ -47,7 +47,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.ButtonDefaults
@@ -75,11 +74,7 @@ import kotlinx.coroutines.launch
 @Composable
 public fun VolumeScreen(
     modifier: Modifier = Modifier,
-    volumeViewModel: VolumeViewModel = viewModel(
-        factory = VolumeViewModel.systemFactory(
-            LocalContext.current.applicationContext
-        )
-    ),
+    volumeViewModel: VolumeViewModel = viewModel(factory = VolumeViewModel.Factory),
     showVolumeIndicator: Boolean = true,
     focusRequester: FocusRequester = remember { FocusRequester() }
 ) {

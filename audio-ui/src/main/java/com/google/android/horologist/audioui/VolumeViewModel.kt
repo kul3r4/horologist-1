@@ -16,11 +16,12 @@
 
 package com.google.android.horologist.audioui
 
-import android.content.Context
 import android.media.AudioManager
 import android.os.Vibrator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.horologist.audio.AudioOutput
 import com.google.android.horologist.audio.AudioOutputRepository
 import com.google.android.horologist.audio.SystemAudioOutputRepository
@@ -68,20 +69,19 @@ public open class VolumeViewModel(
         audioOutputRepository.close()
     }
 
-    public companion object {
+    public object Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        public fun systemFactory(application: Context): ViewModelProvider.Factory = object :
-            ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                check(modelClass == VolumeViewModel::class.java)
+        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+            check(modelClass == VolumeViewModel::class.java)
+            
+            val application = extras[APPLICATION_KEY]!!
 
-                val volumeRepository = SystemVolumeRepository.fromContext(application)
-                val audioOutputRepository = SystemAudioOutputRepository.fromContext(application)
-                val vibrator: Vibrator = application.getSystemService(Vibrator::class.java)
+            val volumeRepository = SystemVolumeRepository.fromContext(application)
+            val audioOutputRepository = SystemAudioOutputRepository.fromContext(application)
+            val vibrator: Vibrator = application.getSystemService(Vibrator::class.java)
 
-                // onCleared will release repositories
-                return VolumeViewModel(volumeRepository, audioOutputRepository, vibrator) as T
-            }
+            // onCleared will release repositories
+            return VolumeViewModel(volumeRepository, audioOutputRepository, vibrator) as T
         }
 
     }
