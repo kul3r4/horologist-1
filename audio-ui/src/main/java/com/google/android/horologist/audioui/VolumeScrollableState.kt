@@ -27,14 +27,16 @@ import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
+import com.google.android.horologist.audio.ExperimentalAudioApi
 import com.google.android.horologist.audio.VolumeRepository
 
 /**
  * ScrollableState integration for VolumeControl to scroll events
  * via RSB/Bezel to trigger volume changes.
  */
-public class VolumeScrollableState(private val volumeRepository: VolumeRepository, private val vibrator: Vibrator
-) : ScrollableState {
+@ExperimentalAudioUiApi
+@OptIn(ExperimentalAudioApi::class)
+public class VolumeScrollableState(private val volumeRepository: VolumeRepository, private val vibrator: Vibrator) : ScrollableState {
     override val isScrollInProgress: Boolean
         get() = true
 
