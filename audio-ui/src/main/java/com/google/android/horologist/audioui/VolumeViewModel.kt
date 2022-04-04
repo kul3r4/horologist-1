@@ -18,6 +18,7 @@ package com.google.android.horologist.audioui
 
 import android.content.Context
 import android.media.AudioManager
+import android.os.Vibrator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.horologist.audio.AudioOutput
@@ -40,14 +41,15 @@ import kotlinx.coroutines.flow.StateFlow
  */
 public open class VolumeViewModel(
     internal val volumeRepository: VolumeRepository,
-    internal val audioOutputRepository: AudioOutputRepository
+    internal val audioOutputRepository: AudioOutputRepository,
+    vibrator: Vibrator
 ) : ViewModel() {
     public val volumeState: StateFlow<VolumeState> = volumeRepository.volumeState
 
     public val audioOutput: StateFlow<AudioOutput> = audioOutputRepository.audioOutput
 
     public val volumeScrollableState: VolumeScrollableState =
-        VolumeScrollableState(volumeRepository)
+        VolumeScrollableState(volumeRepository, vibrator)
 
     public fun increaseVolume() {
         volumeRepository.increaseVolume()
@@ -75,10 +77,12 @@ public open class VolumeViewModel(
 
                 val volumeRepository = SystemVolumeRepository.fromContext(application)
                 val audioOutputRepository = SystemAudioOutputRepository.fromContext(application)
+                val vibrator: Vibrator = application.getSystemService(Vibrator::class.java)
 
                 // onCleared will release repositories
-                return VolumeViewModel(volumeRepository, audioOutputRepository) as T
+                return VolumeViewModel(volumeRepository, audioOutputRepository, vibrator) as T
             }
         }
+
     }
 }

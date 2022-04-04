@@ -19,6 +19,7 @@
 package com.google.android.horologist.audioui
 
 import android.media.AudioManager
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollBy
