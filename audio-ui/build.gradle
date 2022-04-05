@@ -46,7 +46,6 @@ android {
         freeCompilerArgs += "-opt-in=androidx.wear.compose.material.ExperimentalWearMaterialApi"
         freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
         freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-        freeCompilerArgs += "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi"
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
@@ -124,6 +123,8 @@ dependencies {
     androidTestImplementation libs.junit
 
     testImplementation libs.kotlinx.coroutines.test
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.6'
 }
 
 apply plugin: "com.vanniktech.maven.publish"

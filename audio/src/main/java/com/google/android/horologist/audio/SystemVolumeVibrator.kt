@@ -14,19 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.horologist.audioui
+package com.google.android.horologist.audio
 
-import com.google.android.horologist.audio.AudioOutput
-import com.google.android.horologist.audio.AudioOutputRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-
-class FakeAudioOutputRepository(): AudioOutputRepository {
-    override val audioOutput: MutableStateFlow<AudioOutput> = MutableStateFlow(AudioOutput.None)
-    override val available: MutableStateFlow<List<AudioOutput>> = MutableStateFlow(listOf())
-
-    override fun launchOutputSelection(closeOnConnect: Boolean) {
-    }
-
-    override fun close() {
-    }
+class SystemVolumeVibrator : VolumeVibrator{
 }

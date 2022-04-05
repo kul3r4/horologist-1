@@ -17,22 +17,15 @@
 package com.google.android.horologist.audioui
 
 import com.google.android.horologist.audio.AudioOutput
-import com.google.android.horologist.audio.VolumeRepository
-import com.google.android.horologist.audio.VolumeState
+import com.google.android.horologist.audio.AudioOutputRepository
+import com.google.android.horologist.audio.ExperimentalAudioApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+@OptIn(ExperimentalAudioApi::class)
+class FakeAudioOutputRepository(): AudioOutputRepository {
+    override val audioOutput: MutableStateFlow<AudioOutput> = MutableStateFlow(AudioOutput.None)
+    override val available: MutableStateFlow<List<AudioOutput>> = MutableStateFlow(listOf())
 
-class FakeVolumeRepository(initial: VolumeState): VolumeRepository {
-    override val volumeState: MutableStateFlow<VolumeState> = MutableStateFlow(initial)
-
-    override fun increaseVolume() {
-        val current = volumeState.value
-        volumeState.value = current.copy(current = (current.current + 1).coerceAtMost(current.max))
-    }
-
-    override fun decreaseVolume() {
-        val current = volumeState.value
-        volumeState.value = current.copy(current = (current.current - 1).coerceAtLeast(current.min))
+    override fun launchOutputSelection(closeOnConnect: Boolean) {
     }
 
     override fun close() {
