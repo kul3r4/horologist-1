@@ -77,10 +77,6 @@ public open class VolumeViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             check(modelClass == VolumeViewModel::class.java)
-<<<<<<< HEAD
-            
-=======
->>>>>>> 64fdc27 (Add haptics, test does not compile)
             val application = extras[APPLICATION_KEY]!!
 
             val volumeRepository = SystemVolumeRepository.fromContext(application)
