@@ -19,9 +19,7 @@ package com.google.android.horologist.audioui
 import TestHaptics
 import android.os.Vibrator
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -38,10 +36,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-//import org.robolectric.RobolectricTestRunner
-//import org.robolectric.RuntimeEnvironment
 
 /*
  * Copyright 2022 The Android Open Source Project
@@ -58,7 +53,6 @@ import org.junit.runner.RunWith
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//@RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalAudioApi::class, ExperimentalAudioUiApi::class, ExperimentalTestApi::class)
 
 class VolumeScreenTest {
