@@ -19,13 +19,18 @@ package com.google.android.horologist.audioui
 import TestHaptics
 import android.os.Vibrator
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.isFocusable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performRotaryScrollInput
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.horologist.audio.ExperimentalAudioApi
 import com.google.android.horologist.audio.VolumeState
 import com.google.android.horologist.audioui.devices.RotaryInput
@@ -34,8 +39,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+
+//import org.robolectric.RobolectricTestRunner
+//import org.robolectric.RuntimeEnvironment
 
 /*
  * Copyright 2022 The Android Open Source Project
@@ -52,8 +58,9 @@ import org.robolectric.RuntimeEnvironment
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@RunWith(RobolectricTestRunner::class)
+//@RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalAudioApi::class, ExperimentalAudioUiApi::class, ExperimentalTestApi::class)
+
 class VolumeScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -64,8 +71,9 @@ class VolumeScreenTest {
         val volumeRepository = FakeVolumeRepository(VolumeState(50,0,100,false))
         val audioOutputRepository = FakeAudioOutputRepository()
 
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         val vibrator =
-                RuntimeEnvironment.getApplication().getSystemService(Vibrator::class.java)
+            context.applicationContext.getSystemService(Vibrator::class.java)
 
         val model = VolumeViewModel(volumeRepository, audioOutputRepository, vibrator)
         val focusRequester = FocusRequester()
@@ -80,7 +88,7 @@ class VolumeScreenTest {
             ) {
                 VolumeScreen(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize().focusRequester(focusRequester),
                     model
                 )
             }
@@ -101,7 +109,7 @@ class VolumeScreenTest {
         }
         composeTestRule.waitForIdle()
 
-        assertThat(haptics.hapticEvents).containsExactly("performScrollTick", "performScrollTick")
-        //assertThat(volumeRepository.volumeState.current).isEqualsTo(52)
+      //  assertThat(haptics.hapticEvents).containsExactly("performScrollTick", "performScrollTick")
+        assertThat(volumeRepository.volumeState.value.current).isEqualTo(52)
     }
 }
