@@ -46,6 +46,7 @@
         </activity>
 
         <activity
+            android:icon="@mipmap/ic_launcher_nav"
             android:name="com.google.android.horologist.navsample.NavActivity"
             android:exported="true"
             android:label="@string/nav_activity">
