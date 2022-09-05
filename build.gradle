@@ -86,6 +86,7 @@ affectedModuleDetector {
 
 allprojects {
     repositories {
+        maven { url "file:///Users/cchiappini/Downloads/9009544/m2repository"}
         google()
         mavenCentral()
 
