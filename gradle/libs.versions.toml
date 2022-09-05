@@ -21,7 +21,7 @@ benManes = "0.42.0"
 com-squareup-okhttp3 = "4.10.0"
 com-squareup-retrofit2 = "2.9.0"
 compose = "1.2.0"
-compose-compiler = "1.2.0"
+compose-compiler = "1.3.0-beta02"
 composesnapshot = "-"
 dokka = "1.5.0"
 espresso = "3.4.0"
@@ -42,6 +42,7 @@ versionCatalogUpdate = "0.5.3"
 wearcompose = "1.0.0"
 
 [libraries]
+runtimeTracing = "androidx.compose.runtime:runtime-tracing:1.0.0-alpha01"
 accompanist-pager = "com.google.accompanist:accompanist-pager:0.25.0"
 affectedmoduledetector = { module = "com.dropbox.affectedmoduledetector:affectedmoduledetector", version.ref = "affectedmoduledetector" }
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }

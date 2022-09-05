@@ -30,13 +30,13 @@ if (localFile.exists()) {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.google.android.horologist.mediasample"
         // Min because of Tiles
         minSdk 26
-        targetSdk 30
+        targetSdk 33
 
         versionCode 1
         versionName "1.0"
@@ -141,6 +141,7 @@ dependencies {
 
     implementation libs.compose.ui.tooling
     implementation libs.compose.ui.util
+    implementation libs.androidx.compose.runtimeTracing
 
     implementation libs.compose.foundation.foundation
     implementation libs.compose.material.iconsext
