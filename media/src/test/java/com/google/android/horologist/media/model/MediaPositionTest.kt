@@ -43,18 +43,17 @@ class MediaPositionTest {
     }
 
     @Test
-    fun givenCurrentPositionIsNegative_whenCreateKnownPosition_thenCreateCorrectly() {
+    fun givenCurrentPositionIsNegative_whenCreateUnknownPosition_thenCreateCorrectly() {
         // given
         val current = (-1).seconds
         val duration = 2.seconds
 
         // when
-        val result =  MediaPosition.create(current = current, duration = duration)
+        val result =  MediaPosition.createUnknownPosition(current = current, duration = duration)
 
         // then
-        assertThat(result.current).isEqualTo(0)
+        assertThat(result.current).isEqualTo(current)
         assertThat(result.duration).isEqualTo(duration)
-        assertThat(result.percent).isEqualTo(0f)
     }
 
     @Test

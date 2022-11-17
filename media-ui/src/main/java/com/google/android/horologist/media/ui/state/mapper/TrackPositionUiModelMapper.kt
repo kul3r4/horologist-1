@@ -32,7 +32,10 @@ public object TrackPositionUiModelMapper {
     public fun map(mediaPosition: MediaPosition): TrackPositionUiModel {
         val (duration, percent) = if (mediaPosition is MediaPosition.KnownDuration) {
             mediaPosition.duration.inWholeMilliseconds to mediaPosition.percent
-        } else {
+        }
+        else if (mediaPosition is MediaPosition.UnknownPosition){
+            mediaPosition.duration.inWholeMilliseconds to 0F
+        }else {
             0L to 0F
         }
 

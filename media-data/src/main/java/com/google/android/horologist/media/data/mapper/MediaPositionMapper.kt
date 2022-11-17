@@ -32,7 +32,9 @@ public object MediaPositionMapper {
             null
         } else if (player.duration == C.TIME_UNSET || player.duration <= 0L) {
             MediaPosition.UnknownDuration(player.currentPosition.milliseconds)
-        } else {
+        } else if (player.currentPosition == C.POSITION_UNSET.toLong() || player.currentPosition <= 0L) {
+            MediaPosition.createUnknownPosition(player.currentPosition.milliseconds, player.duration.milliseconds)
+        }else {
             MediaPosition.create(
                 current = player.currentPosition.milliseconds,
                 // Ensure progress is max 100%, even given faulty media metadata

@@ -35,15 +35,17 @@ public sealed class MediaPosition(
 
     public data class UnknownDuration(override val current: Duration) : MediaPosition(current)
 
+    public data class UnknownPosition internal constructor(
+        public override val current: Duration,
+        public val duration: Duration,
+    ) : MediaPosition(current)
+
     public companion object {
 
         public fun create(
             current: Duration,
             duration: Duration
         ): KnownDuration {
-            check(!current.isNegative()) {
-                "Current position can't be a negative value [current: $current] [duration: $duration]."
-            }
             check(duration.isPositive()) {
                 "Duration has to be greater than zero [current: $current] [duration: $duration]."
             }
@@ -55,6 +57,21 @@ public sealed class MediaPosition(
                 current.inWholeMilliseconds.toFloat() / duration.inWholeMilliseconds.toFloat()
 
             return KnownDuration(current, duration, percent)
+        }
+
+        public fun createUnknownPosition(
+            current: Duration,
+            duration: Duration
+        ): UnknownPosition {
+
+            check(duration.isPositive()) {
+                "Duration has to be greater than zero [current: $current] [duration: $duration]."
+            }
+            check(current <= duration) {
+                "Duration can't be less than current position [current: $current] [duration: $duration]."
+            }
+
+            return UnknownPosition(current, duration)
         }
     }
 }

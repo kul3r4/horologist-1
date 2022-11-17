@@ -41,4 +41,36 @@ class TrackPositionUiModelMapperTest {
         assertThat(result.duration).isEqualTo(duration.inWholeMilliseconds)
         assertThat(result.percent).isEqualTo(0.5f)
     }
+
+    @Test
+    fun givenUnknownMediaPosition_thenMapsCorrectly() {
+        // given
+        val current = (-1).seconds
+        val duration = 2.seconds
+        val mediaPosition = MediaPosition.createUnknownPosition(current, duration)
+
+        // when
+        val result = TrackPositionUiModelMapper.map(mediaPosition)
+
+        // then
+        assertThat(result.current).isEqualTo(current.inWholeMilliseconds)
+        assertThat(result.duration).isEqualTo(duration.inWholeMilliseconds)
+        assertThat(result.percent).isEqualTo(0f)
+    }
+
+    @Test
+    fun givenUnknownMediaDuration_thenMapsCorrectly() {
+        // given
+        val current = 1.seconds
+        val duration = -2.seconds
+        val mediaPosition = MediaPosition.UnknownDuration(current)
+
+        // when
+        val result = TrackPositionUiModelMapper.map(mediaPosition)
+
+        // then
+        assertThat(result.current).isEqualTo(current.inWholeMilliseconds)
+        assertThat(result.duration).isEqualTo(0)
+        assertThat(result.percent).isEqualTo(0)
+    }
 }
