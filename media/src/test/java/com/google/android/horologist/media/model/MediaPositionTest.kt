@@ -43,15 +43,18 @@ class MediaPositionTest {
     }
 
     @Test
-    fun givenCurrentPositionIsNegative_whenCreateKnownPosition_thenExceptionIsThrown() {
+    fun givenCurrentPositionIsNegative_whenCreateKnownPosition_thenCreateCorrectly() {
         // given
         val current = (-1).seconds
+        val duration = 2.seconds
 
         // when
-        val whenBlock = { MediaPosition.create(current = current, duration = 10.seconds) }
+        val result =  MediaPosition.create(current = current, duration = duration)
 
         // then
-        assertThrows(IllegalStateException::class.java) { whenBlock() }
+        assertThat(result.current).isEqualTo(0)
+        assertThat(result.duration).isEqualTo(duration)
+        assertThat(result.percent).isEqualTo(0f)
     }
 
     @Test
