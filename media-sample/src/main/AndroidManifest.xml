@@ -37,9 +37,9 @@
         android:label="@string/sample_app_name"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme">
-        <uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
+<!--        <uses-library-->
+<!--            android:name="com.google.android.wearable"-->
+<!--            android:required="true" />-->
 
         <meta-data
             android:name="com.google.android.wearable.standalone"

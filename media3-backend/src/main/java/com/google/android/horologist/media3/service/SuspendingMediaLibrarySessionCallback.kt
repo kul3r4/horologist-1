@@ -31,7 +31,7 @@ import kotlinx.coroutines.guava.future
 /**
  * ListenableFuture to Coroutines adapting base class for MediaLibrarySession.Callback.
  *
- * Each metho is implemented like for like,
+ * Each method is implemented like for like.
  */
 @ExperimentalHorologistMedia3BackendApi
 public abstract class SuspendingMediaLibrarySessionCallback(

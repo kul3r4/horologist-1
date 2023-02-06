@@ -57,6 +57,7 @@ import com.google.android.horologist.media3.rules.PlaybackRules
 import com.google.android.horologist.media3.tracing.TracingListener
 import com.google.android.horologist.mediasample.data.service.complication.DataUpdates
 import com.google.android.horologist.mediasample.data.service.playback.UampMediaLibrarySessionCallback
+import com.google.android.horologist.mediasample.data.service.playback.customactions.UampCustomActionHandler
 import com.google.android.horologist.mediasample.domain.SettingsRepository
 import com.google.android.horologist.mediasample.domain.strategy
 import com.google.android.horologist.mediasample.ui.AppConfig
@@ -242,11 +243,16 @@ object PlaybackServiceModule {
 
     @ServiceScoped
     @Provides
+    fun uampCustomActionHandler(): UampCustomActionHandler = UampCustomActionHandler()
+
+    @ServiceScoped
+    @Provides
     fun librarySessionCallback(
         logger: ErrorReporter,
-        serviceCoroutineScope: CoroutineScope
+        serviceCoroutineScope: CoroutineScope,
+        uampCustomActionHandler: UampCustomActionHandler
     ): MediaLibrarySession.Callback =
-        UampMediaLibrarySessionCallback(serviceCoroutineScope, logger)
+        UampMediaLibrarySessionCallback(serviceCoroutineScope, logger, uampCustomActionHandler)
 
     @ServiceScoped
     @Provides
@@ -254,7 +260,8 @@ object PlaybackServiceModule {
         service: Service,
         player: Player,
         librarySessionCallback: MediaLibrarySession.Callback,
-        intentBuilder: IntentBuilder
+        intentBuilder: IntentBuilder,
+        uampCustomActionHandler: UampCustomActionHandler
     ): MediaLibrarySession =
         MediaLibrarySession.Builder(
             service as MediaLibraryService,
@@ -262,7 +269,8 @@ object PlaybackServiceModule {
             librarySessionCallback
         )
             .setSessionActivity(intentBuilder.buildPlayerIntent())
-            .build().also {
+            .build()
+            .also {
                 (service as LifecycleOwner).lifecycle.addObserver(
                     object :
                         DefaultLifecycleObserver {
@@ -271,8 +279,8 @@ object PlaybackServiceModule {
                         }
                     }
                 )
+                it.setCustomLayout(uampCustomActionHandler.getButtonLayout())
             }
-
     @ServiceScoped
     @Provides
     fun audioSink(
