@@ -76,7 +76,7 @@ package com.google.android.horologist.media.ui.components {
 
   public final class PlayPauseButtonKt {
     method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlayPauseButton(kotlin.jvm.functions.Function0<kotlin.Unit> onPlayClick, kotlin.jvm.functions.Function0<kotlin.Unit> onPauseClick, boolean playing, optional androidx.compose.ui.Modifier modifier, optional boolean enabled, optional androidx.wear.compose.material.ButtonColors colors, optional float iconSize, optional long tapTargetSize, optional long backgroundColor, optional kotlin.jvm.functions.Function0<kotlin.Unit> progress);
-    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlayPauseProgressButton(kotlin.jvm.functions.Function0<kotlin.Unit> onPlayClick, kotlin.jvm.functions.Function0<kotlin.Unit> onPauseClick, boolean playing, com.google.android.horologist.media.ui.state.model.TrackPositionUiModel trackPositionUiModel, optional androidx.compose.ui.Modifier modifier, optional boolean enabled, optional androidx.wear.compose.material.ButtonColors colors, optional float iconSize, optional long tapTargetSize, optional long progressColour, optional long trackColor, optional long backgroundColor);
+    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlayPauseProgressButton(kotlin.jvm.functions.Function0<kotlin.Unit> onPlayClick, kotlin.jvm.functions.Function0<kotlin.Unit> onPauseClick, boolean playing, com.google.android.horologist.media.ui.state.model.TrackPositionUiModel trackPositionUiModel, optional androidx.compose.ui.Modifier modifier, optional boolean enabled, optional androidx.wear.compose.material.ButtonColors colors, optional float iconSize, optional long tapTargetSize, optional float progressStrokeWidth, optional long progressColour, optional long trackColor, optional long backgroundColor);
   }
 
   public final class PodcastControlButtonsKt {
@@ -377,14 +377,14 @@ package com.google.android.horologist.media.ui.screens.entity {
     method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void DefaultEntityScreenHeader(String title, optional androidx.compose.ui.Modifier modifier);
     method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void EntityScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, kotlin.jvm.functions.Function0<kotlin.Unit> headerContent, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function0<kotlin.Unit>? buttonsContent, optional kotlin.jvm.functions.Function1<? super androidx.wear.compose.foundation.lazy.ScalingLazyListScope,kotlin.Unit>? content);
     method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static <Media> void EntityScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, kotlin.jvm.functions.Function0<kotlin.Unit> headerContent, java.util.List<? extends Media> mediaList, kotlin.jvm.functions.Function1<? super Media,kotlin.Unit> mediaContent, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function0<kotlin.Unit>? buttonsContent);
-    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static <Media> void EntityScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, com.google.android.horologist.media.ui.screens.entity.EntityScreenState<Media> entityScreenState, kotlin.jvm.functions.Function0<kotlin.Unit> headerContent, kotlin.jvm.functions.Function1<? super androidx.wear.compose.foundation.lazy.ScalingLazyListScope,kotlin.Unit> loadingContent, kotlin.jvm.functions.Function1<? super Media,kotlin.Unit> mediaContent, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function0<kotlin.Unit>? buttonsContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? failedContent);
+    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static <Media> void EntityScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, com.google.android.horologist.media.ui.screens.entity.EntityScreenState<? extends Media> entityScreenState, kotlin.jvm.functions.Function0<kotlin.Unit> headerContent, kotlin.jvm.functions.Function1<? super androidx.wear.compose.foundation.lazy.ScalingLazyListScope,kotlin.Unit> loadingContent, kotlin.jvm.functions.Function1<? super Media,kotlin.Unit> mediaContent, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function0<kotlin.Unit>? buttonsContent, optional kotlin.jvm.functions.Function0<kotlin.Unit>? failedContent);
   }
 
   @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public abstract sealed class EntityScreenState<Media> {
   }
 
-  public static final class EntityScreenState.Failed<Media> extends com.google.android.horologist.media.ui.screens.entity.EntityScreenState<Media> {
-    ctor public EntityScreenState.Failed();
+  public static final class EntityScreenState.Failed extends com.google.android.horologist.media.ui.screens.entity.EntityScreenState {
+    field public static final com.google.android.horologist.media.ui.screens.entity.EntityScreenState.Failed INSTANCE;
   }
 
   public static final class EntityScreenState.Loaded<Media> extends com.google.android.horologist.media.ui.screens.entity.EntityScreenState<Media> {
@@ -395,20 +395,20 @@ package com.google.android.horologist.media.ui.screens.entity {
     property public final java.util.List<Media> mediaList;
   }
 
-  public static final class EntityScreenState.Loading<Media> extends com.google.android.horologist.media.ui.screens.entity.EntityScreenState<Media> {
-    ctor public EntityScreenState.Loading();
+  public static final class EntityScreenState.Loading extends com.google.android.horologist.media.ui.screens.entity.EntityScreenState {
+    field public static final com.google.android.horologist.media.ui.screens.entity.EntityScreenState.Loading INSTANCE;
   }
 
   public final class PlaylistDownloadScreenKt {
-    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlaylistDownloadScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, String playlistName, com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<com.google.android.horologist.media.ui.state.model.PlaylistUiModel,com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> playlistDownloadScreenState, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onDownloadButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onCancelDownloadButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onDownloadItemClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onDownloadItemInProgressClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onShuffleButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onPlayButtonClick, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit>? onDownloadCompletedButtonClick, optional String defaultMediaTitle, optional androidx.compose.ui.graphics.painter.Painter? downloadItemArtworkPlaceholder, optional String? onDownloadItemInProgressClickActionLabel);
+    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlaylistDownloadScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, String playlistName, com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<com.google.android.horologist.media.ui.state.model.PlaylistUiModel,? extends com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> playlistDownloadScreenState, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onDownloadButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onCancelDownloadButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onDownloadItemClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onDownloadItemInProgressClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onShuffleButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit> onPlayButtonClick, optional androidx.compose.ui.Modifier modifier, optional kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.PlaylistUiModel,kotlin.Unit>? onDownloadCompletedButtonClick, optional String defaultMediaTitle, optional androidx.compose.ui.graphics.painter.Painter? downloadItemArtworkPlaceholder, optional String? onDownloadItemInProgressClickActionLabel);
     method @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState.Loaded<com.google.android.horologist.media.ui.state.model.PlaylistUiModel,com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> createPlaylistDownloadScreenStateLoaded(com.google.android.horologist.media.ui.state.model.PlaylistUiModel playlistModel, java.util.List<? extends com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> downloadMediaList);
   }
 
   @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public abstract sealed class PlaylistDownloadScreenState<Collection, Media> {
   }
 
-  public static final class PlaylistDownloadScreenState.Failed<Collection, Media> extends com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<Collection,Media> {
-    ctor public PlaylistDownloadScreenState.Failed();
+  public static final class PlaylistDownloadScreenState.Failed extends com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState {
+    field public static final com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState.Failed INSTANCE;
   }
 
   public static final class PlaylistDownloadScreenState.Loaded<Collection, Media> extends com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<Collection,Media> {
@@ -451,12 +451,12 @@ package com.google.android.horologist.media.ui.screens.entity {
     property public final float progress;
   }
 
-  public static final class PlaylistDownloadScreenState.Loading<Collection, Media> extends com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<Collection,Media> {
-    ctor public PlaylistDownloadScreenState.Loading();
+  public static final class PlaylistDownloadScreenState.Loading extends com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState {
+    field public static final com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState.Loading INSTANCE;
   }
 
   public final class PlaylistStreamingScreenKt {
-    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlaylistStreamingScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, String playlistName, com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<com.google.android.horologist.media.ui.state.model.PlaylistUiModel,com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> playlistDownloadScreenState, kotlin.jvm.functions.Function0<kotlin.Unit> onShuffleButtonClick, kotlin.jvm.functions.Function0<kotlin.Unit> onPlayButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onPlayItemClick, optional androidx.compose.ui.Modifier modifier, optional String defaultMediaTitle);
+    method @androidx.compose.runtime.Composable @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public static void PlaylistStreamingScreen(com.google.android.horologist.compose.layout.ScalingLazyColumnState columnState, String playlistName, com.google.android.horologist.media.ui.screens.entity.PlaylistDownloadScreenState<com.google.android.horologist.media.ui.state.model.PlaylistUiModel,? extends com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel> playlistDownloadScreenState, kotlin.jvm.functions.Function0<kotlin.Unit> onShuffleButtonClick, kotlin.jvm.functions.Function0<kotlin.Unit> onPlayButtonClick, kotlin.jvm.functions.Function1<? super com.google.android.horologist.media.ui.state.model.DownloadMediaUiModel,kotlin.Unit> onPlayItemClick, optional androidx.compose.ui.Modifier modifier, optional String defaultMediaTitle);
   }
 
 }
@@ -834,23 +834,28 @@ package com.google.android.horologist.media.ui.state.model {
   @com.google.android.horologist.media.ui.ExperimentalHorologistMediaUiApi public abstract sealed class TrackPositionUiModel {
     method public abstract boolean getShouldAnimate();
     method public abstract boolean getShowProgress();
+    method public abstract boolean isLoading();
+    property public abstract boolean isLoading;
     property public abstract boolean shouldAnimate;
     property public abstract boolean showProgress;
   }
 
   public static final class TrackPositionUiModel.Actual extends com.google.android.horologist.media.ui.state.model.TrackPositionUiModel {
-    ctor public TrackPositionUiModel.Actual(float percent, long duration, long position, optional boolean shouldAnimate);
+    ctor public TrackPositionUiModel.Actual(float percent, long duration, long position, optional boolean shouldAnimate, optional boolean isLoading);
     method public float component1();
     method public long component2-UwyO8pc();
     method public long component3-UwyO8pc();
     method public boolean component4();
-    method public com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Actual copy-vLdBGDU(float percent, long duration, long position, boolean shouldAnimate);
+    method public boolean component5();
+    method public com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Actual copy-jKevqZI(float percent, long duration, long position, boolean shouldAnimate, boolean isLoading);
     method public long getDuration();
     method public float getPercent();
     method public long getPosition();
     method public boolean getShouldAnimate();
     method public boolean getShowProgress();
+    method public boolean isLoading();
     property public final long duration;
+    property public boolean isLoading;
     property public final float percent;
     property public final long position;
     property public boolean shouldAnimate;
@@ -866,19 +871,37 @@ package com.google.android.horologist.media.ui.state.model {
   public static final class TrackPositionUiModel.Hidden extends com.google.android.horologist.media.ui.state.model.TrackPositionUiModel {
     method public boolean getShouldAnimate();
     method public boolean getShowProgress();
+    method public boolean isLoading();
+    property public boolean isLoading;
     property public boolean shouldAnimate;
     property public boolean showProgress;
     field public static final com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Hidden INSTANCE;
   }
 
+  public static final class TrackPositionUiModel.Loading extends com.google.android.horologist.media.ui.state.model.TrackPositionUiModel {
+    ctor public TrackPositionUiModel.Loading(optional boolean shouldAnimate, optional boolean showProgress);
+    method public boolean component1();
+    method public boolean component2();
+    method public com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Loading copy(boolean shouldAnimate, boolean showProgress);
+    method public boolean getShouldAnimate();
+    method public boolean getShowProgress();
+    method public boolean isLoading();
+    property public boolean isLoading;
+    property public boolean shouldAnimate;
+    property public boolean showProgress;
+  }
+
   public static final class TrackPositionUiModel.Predictive extends com.google.android.horologist.media.ui.state.model.TrackPositionUiModel {
-    ctor public TrackPositionUiModel.Predictive(com.google.android.horologist.media.model.PositionPredictor predictor, optional boolean shouldAnimate);
+    ctor public TrackPositionUiModel.Predictive(com.google.android.horologist.media.model.PositionPredictor predictor, optional boolean shouldAnimate, optional boolean isLoading);
     method public com.google.android.horologist.media.model.PositionPredictor component1();
     method public boolean component2();
-    method public com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Predictive copy(com.google.android.horologist.media.model.PositionPredictor predictor, boolean shouldAnimate);
+    method public boolean component3();
+    method public com.google.android.horologist.media.ui.state.model.TrackPositionUiModel.Predictive copy(com.google.android.horologist.media.model.PositionPredictor predictor, boolean shouldAnimate, boolean isLoading);
     method public com.google.android.horologist.media.model.PositionPredictor getPredictor();
     method public boolean getShouldAnimate();
     method public boolean getShowProgress();
+    method public boolean isLoading();
+    property public boolean isLoading;
     property public final com.google.android.horologist.media.model.PositionPredictor predictor;
     property public boolean shouldAnimate;
     property public boolean showProgress;

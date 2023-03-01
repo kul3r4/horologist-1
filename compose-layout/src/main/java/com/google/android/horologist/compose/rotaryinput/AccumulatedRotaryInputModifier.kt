@@ -16,10 +16,34 @@
 
 package com.google.android.horologist.compose.rotaryinput
 
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.foundation.focusable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.rotary.RotaryScrollEvent
 import androidx.compose.ui.input.rotary.onRotaryScrollEvent
+import androidx.wear.compose.foundation.RequestFocusWhenActive
+import com.google.android.horologist.compose.navscaffold.ExperimentalHorologistComposeLayoutApi
+
+/**
+ * A focusable modifier that accumulates the scroll distances from [RotaryScrollEvent] and notifies
+ * changes with [onValueChange] once accumulated value is over the thresholds.
+ *
+ * @param focusRequester requests for focus for the rotary
+ * @param onValueChange callback invoked once accumulated value is over the thresholds.
+ */
+@ExperimentalHorologistComposeLayoutApi
+public fun Modifier.onRotaryInputAccumulatedWithFocus(
+    focusRequester: FocusRequester,
+    onValueChange: (Float) -> Unit
+): Modifier = composed {
+    RequestFocusWhenActive(focusRequester)
+    onRotaryInputAccumulated(onValueChange = onValueChange)
+        .focusRequester(focusRequester)
+        .focusable()
+}
 
 /**
  * Accumulates the scroll distances from [RotaryScrollEvent] and notifies changes with
@@ -30,20 +54,22 @@ import androidx.compose.ui.input.rotary.onRotaryScrollEvent
  * @param rateLimitCoolDownMs cool down time when rate limiting is enabled, negative value disables.
  * @param onValueChange callback invoked once accumulated value is over the thresholds.
  */
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalHorologistComposeLayoutApi
 public fun Modifier.onRotaryInputAccumulated(
     eventAccumulationThresholdMs: Long = RotaryInputConfigDefaults.DEFAULT_EVENT_ACCUMULATION_THRESHOLD_MS,
     minValueChangeDistancePx: Float = RotaryInputConfigDefaults.DEFAULT_MIN_VALUE_CHANGE_DISTANCE_PX,
     rateLimitCoolDownMs: Long = RotaryInputConfigDefaults.DEFAULT_RATE_LIMIT_COOL_DOWN_MS,
     onValueChange: (change: Float) -> Unit
-): Modifier {
-    val rotaryInputAccumulator = RotaryInputAccumulator(
-        eventAccumulationThresholdMs = eventAccumulationThresholdMs,
-        minValueChangeDistancePx = minValueChangeDistancePx,
-        rateLimitCoolDownMs = rateLimitCoolDownMs,
-        onValueChange = onValueChange
-    )
-    return onRotaryScrollEvent(rotaryInputAccumulator::onRotaryScrollEvent)
+): Modifier = composed {
+    val rotaryInputAccumulator = remember {
+        RotaryInputAccumulator(
+            eventAccumulationThresholdMs = eventAccumulationThresholdMs,
+            minValueChangeDistancePx = minValueChangeDistancePx,
+            rateLimitCoolDownMs = rateLimitCoolDownMs,
+            onValueChange = onValueChange
+        )
+    }
+    return@composed onRotaryScrollEvent(rotaryInputAccumulator::onRotaryScrollEvent)
 }
 
 /**
@@ -51,7 +77,7 @@ public fun Modifier.onRotaryInputAccumulated(
  *
  * @param event the [RotaryScrollEvent] to be processed.
  */
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalHorologistComposeLayoutApi
 internal fun RotaryInputAccumulator.onRotaryScrollEvent(event: RotaryScrollEvent): Boolean {
     onRotaryScroll(event.verticalScrollPixels, event.uptimeMillis)
     return true

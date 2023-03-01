@@ -38,7 +38,7 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState
 
 /**
- * A screen to prompt to users to sign in.
+ * A screen to prompt users to sign in.
  *
  * Through the [message] the
  * [sign-in benefits](https://developer.android.com/training/wearables/design/sign-in#benefits) are
@@ -52,6 +52,9 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumnState
  * The [content] should provide
  * [sign-in alternatives](https://developer.android.com/training/wearables/design/sign-in#alternatives).
  *
+ * @sample com.google.android.horologist.auth.sample.screens.googlesignin.prompt.GoogleSignInPromptSampleScreen
+ * @sample com.google.android.horologist.auth.sample.screens.oauth.devicegrant.prompt.DeviceGrantSignInPromptScreen
+ * @sample com.google.android.horologist.auth.sample.screens.oauth.pkce.prompt.PKCESignInPromptScreen
  */
 @ExperimentalHorologistAuthUiApi
 @Composable

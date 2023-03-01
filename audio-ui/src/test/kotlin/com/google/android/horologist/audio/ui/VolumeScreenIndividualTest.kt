@@ -139,8 +139,7 @@ class VolumeScreenIndividualTest {
                     volume = { volumeState },
                     increaseVolume = { },
                     decreaseVolume = { },
-                    showVolumeIndicator = false,
-                    onVolumeChangeByScroll = {}
+                    showVolumeIndicator = false
                 )
             }
         }
