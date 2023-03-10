@@ -16,10 +16,9 @@
 
 package com.google.android.horologist.mediasample.di
 
-import android.content.ComponentName
 import android.content.Context
 import androidx.media3.session.MediaBrowser
-import androidx.media3.session.SessionToken
+import com.google.android.clockwork.media.thirdpartyapi.ThirdPartyApi
 import com.google.android.horologist.media.data.mapper.MediaItemExtrasMapper
 import com.google.android.horologist.media.data.mapper.MediaItemExtrasMapperNoopImpl
 import com.google.android.horologist.media.data.mapper.MediaItemMapper
@@ -27,7 +26,6 @@ import com.google.android.horologist.media.data.mapper.MediaMapper
 import com.google.android.horologist.media.data.repository.PlayerRepositoryImpl
 import com.google.android.horologist.media.repository.PlayerRepository
 import com.google.android.horologist.media3.flows.buildSuspend
-import com.google.android.horologist.mediasample.data.service.playback.PlaybackService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,26 +57,48 @@ object ViewModelModule {
         }
     }
 
+//    @Provides
+//    @ActivityRetainedScoped
+//    fun mediaController(
+//        @ApplicationContext application: Context,
+//        activityRetainedLifecycle: ActivityRetainedLifecycle,
+//        coroutineScope: CoroutineScope
+//    ): Deferred<MediaBrowser> =
+//        coroutineScope.async {
+//            MediaBrowser.Builder(
+//                application,
+//                SessionToken(application, ComponentName(application, PlaybackService::class.java))
+//            ).buildSuspend()
+//        }.also {
+//            activityRetainedLifecycle.addOnClearedListener {
+//                it.cancel()
+//                if (it.isCompleted && !it.isCancelled) {
+//                    it.getCompleted().release()
+//                }
+//            }
+//        }
+
+
     @Provides
     @ActivityRetainedScoped
-    fun mediaController(
+    fun mediaController2(
         @ApplicationContext application: Context,
         activityRetainedLifecycle: ActivityRetainedLifecycle,
         coroutineScope: CoroutineScope
     ): Deferred<MediaBrowser> =
         coroutineScope.async {
-            MediaBrowser.Builder(
-                application,
-                SessionToken(application, ComponentName(application, PlaybackService::class.java))
-            ).buildSuspend()
-        }.also {
-            activityRetainedLifecycle.addOnClearedListener {
-                it.cancel()
-                if (it.isCompleted && !it.isCancelled) {
-                    it.getCompleted().release()
-                }
+        MediaBrowser.Builder(
+            application,
+            checkNotNull(ThirdPartyApi.getBridgedMediaSessionToken(application))
+        ).buildSuspend()
+    }.also {
+        activityRetainedLifecycle.addOnClearedListener {
+            it.cancel()
+            if (it.isCompleted && !it.isCancelled) {
+                it.getCompleted().release()
             }
         }
+    }
 
     @Provides
     @ActivityRetainedScoped
@@ -87,7 +107,7 @@ object ViewModelModule {
         mediaItemMapper: MediaItemMapper,
         activityRetainedLifecycle: ActivityRetainedLifecycle,
         coroutineScope: CoroutineScope,
-        mediaController: Deferred<MediaBrowser>
+        mediaController2: Deferred<MediaBrowser>
     ): PlayerRepositoryImpl =
         PlayerRepositoryImpl(
             mediaMapper = mediaMapper,
@@ -98,7 +118,7 @@ object ViewModelModule {
             }
 
             coroutineScope.launch(Dispatchers.Main) {
-                val player = mediaController.await()
+                val player = mediaController2.await()
                 playerRepository.connect(
                     player = player,
                     onClose = player::release

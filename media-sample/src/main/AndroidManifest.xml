@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.android.horologist.mediasample">
+    package="com.example.android.uamp">
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -28,6 +28,7 @@
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
+    <uses-permission android:name="com.google.android.wearable.media.sessions.permission.BIND_THIRD_PARTY_MEDIA_CONTROLS"/>
 
     <application
         android:name=".ui.app.MediaApplication"

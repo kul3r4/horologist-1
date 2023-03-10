@@ -16,6 +16,9 @@
 
 import java.util.Properties
 
+include(":lib")
+
+
 plugins {
     id("com.gradle.enterprise") version "3.5"
 }
@@ -58,6 +61,7 @@ include(":datalayer")
 include(":datalayer-watch")
 include(":datalayer-phone")
 include(":health-composables")
+include(":thirdpartyapi")
 
 // Enable Gradle's version catalog support
 // https://docs.gradle.org/current/userguide/platforms.html

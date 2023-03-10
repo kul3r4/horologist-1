@@ -236,6 +236,7 @@ dependencies {
     implementation(projects.authUi)
     implementation(libs.playservices.auth)
     implementation(libs.kotlinx.coroutines.playservices)
+    implementation(projects.thirdpartyapi)
 
     add("benchmarkImplementation", libs.androidx.runtime.tracing)
 
