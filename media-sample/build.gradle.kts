@@ -38,7 +38,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.google.android.horologist.mediasample"
+        applicationId = "com.example.android.uamp.next"
         // Min because of Tiles
         minSdk = 26
         targetSdk = 30
@@ -52,7 +52,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".debug"
+          //  applicationIdSuffix = ".debug"
             manifestPlaceholders["schemeSuffix"] = "-debug"
         }
         release {

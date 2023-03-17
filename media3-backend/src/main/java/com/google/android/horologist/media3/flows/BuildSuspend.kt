@@ -17,6 +17,7 @@
 package com.google.android.horologist.media3.flows
 
 import androidx.media3.session.MediaBrowser
+import androidx.media3.session.MediaController
 import com.google.android.horologist.media3.ExperimentalHorologistMedia3BackendApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.guava.await
@@ -24,4 +25,7 @@ import kotlinx.coroutines.withContext
 
 @ExperimentalHorologistMedia3BackendApi
 public suspend fun MediaBrowser.Builder.buildSuspend(): MediaBrowser =
+    withContext(Dispatchers.Main) { buildAsync().await() }
+
+public suspend fun MediaController.Builder.buildSuspend(): MediaController =
     withContext(Dispatchers.Main) { buildAsync().await() }
