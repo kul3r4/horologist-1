@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
+import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -36,6 +37,7 @@ import com.google.android.horologist.composables.TimePicker
 import com.google.android.horologist.composables.TimePickerWith12HourClock
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
 import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.padding
 import com.google.android.horologist.compose.layout.ScalingLazyColumnState.RotaryMode
 import com.google.android.horologist.compose.layout.ScreenScaffold
@@ -53,6 +55,7 @@ import com.google.android.horologist.materialcomponents.SampleConfirmationScreen
 import com.google.android.horologist.materialcomponents.SampleIconScreen
 import com.google.android.horologist.materialcomponents.SampleOutlinedChipScreen
 import com.google.android.horologist.materialcomponents.SampleOutlinedCompactChipScreen
+import com.google.android.horologist.materialcomponents.SampleResponsiveListHeader
 import com.google.android.horologist.materialcomponents.SampleSplitToggleChipScreen
 import com.google.android.horologist.materialcomponents.SampleStepperScreen
 import com.google.android.horologist.materialcomponents.SampleTitleScreen
@@ -81,366 +84,382 @@ fun SampleWearApp() {
 
     var time by remember { mutableStateOf(LocalDateTime.now()) }
 
-    AppScaffold {
-        SwipeDismissableNavHost(
-            startDestination = Screen.Menu.route,
-            navController = navController,
-            state = navHostState,
-        ) {
-            composable(
-                route = Screen.Menu.route,
+    MaterialTheme {
+        AppScaffold {
+            SwipeDismissableNavHost(
+                startDestination = Screen.Menu.route,
+                navController = navController,
+                state = navHostState,
             ) {
-                MenuScreen(
-                    navigateToRoute = { route -> navController.navigate(route) },
-                    time = time,
-                )
-            }
-            composable(
-                Screen.Network.route,
-            ) {
-                NetworkScreen()
-            }
-            composable(Screen.FillMaxRectangle.route) {
-                FillMaxRectangleScreen()
-            }
-            composable(Screen.Volume.route) {
-                VolumeScreen()
-            }
-            composable(Screen.ScrollAway.route) {
-                val scrollState = rememberLazyListState()
-                ScreenScaffold(scrollState = scrollState) {
-                    ScrollScreenLazyColumn(
-                        scrollState = scrollState,
+                composable(
+                    route = Screen.Menu.route,
+                ) {
+                    MenuScreen(
+                        navigateToRoute = { route -> navController.navigate(route) },
+                        time = time,
                     )
                 }
-            }
-            composable(
-                Screen.ScrollAwaySLC.route,
-            ) {
-                val columnState = rememberResponsiveColumnState(
-                    contentPadding = padding(
-                        first = ScalingLazyColumnDefaults.ItemType.Card,
-                        last = ScalingLazyColumnDefaults.ItemType.Card,
+                composable(
+                    Screen.Network.route,
+                ) {
+                    NetworkScreen()
+                }
+                composable(Screen.FillMaxRectangle.route) {
+                    FillMaxRectangleScreen()
+                }
+                composable(Screen.Volume.route) {
+                    VolumeScreen()
+                }
+                composable(Screen.ScrollAway.route) {
+                    val scrollState = rememberLazyListState()
+                    ScreenScaffold(scrollState = scrollState) {
+                        ScrollScreenLazyColumn(
+                            scrollState = scrollState,
+                        )
+                    }
+                }
+                composable(
+                    Screen.ScrollAwaySLC.route,
+                ) {
+                    val columnState = rememberResponsiveColumnState(
+                        contentPadding = padding(
+                            first = ItemType.Card,
+                            last = ItemType.Card,
+                        ),
+                    )
+
+                    ScreenScaffold(scrollState = columnState) {
+                        ScrollAwayScreenScalingLazyColumn(
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(
+                    Screen.ScrollAwayColumn.route,
+                ) {
+                    val scrollState = rememberScrollState()
+                    ScreenScaffold(scrollState = scrollState) {
+                        ScrollAwayScreenColumn(
+                            scrollState = scrollState,
+                        )
+                    }
+                }
+                composable(Screen.DatePicker.route) {
+                    DatePicker(
+                        date = time.toLocalDate(),
+                        onDateConfirm = {
+                            time = time.toLocalTime().atDate(it)
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                composable(Screen.FromDatePicker.route) {
+                    val date = time.toLocalDate()
+                    DatePicker(
+                        date = date,
+                        fromDate = date,
+                        onDateConfirm = {
+                            time = time.toLocalTime().atDate(it)
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                composable(Screen.ToDatePicker.route) {
+                    val date = time.toLocalDate()
+                    DatePicker(
+                        date = date,
+                        toDate = date,
+                        onDateConfirm = {
+                            time = time.toLocalTime().atDate(it)
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                composable(Screen.TimePicker.route) {
+                    TimePickerWith12HourClock(
+                        time = time.toLocalTime(),
+                        onTimeConfirm = {
+                            time = time.toLocalDate().atTime(it)
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                composable(Screen.TimeWithSecondsPicker.route) {
+                    TimePicker(
+                        time = time.toLocalTime(),
+                        onTimeConfirm = {
+                            time = time.toLocalDate().atTime(it)
+                            navController.popBackStack()
+                        },
+                    )
+                }
+                composable(Screen.TimeWithoutSecondsPicker.route) {
+                    TimePicker(
+                        time = time.toLocalTime(),
+                        onTimeConfirm = {
+                            time = time.toLocalDate().atTime(it)
+                            navController.popBackStack()
+                        },
+                        showSeconds = false,
+                    )
+                }
+                composable(
+                    route = Screen.MaterialAlertDialog.route,
+                ) {
+                    SampleAlertDialog()
+                }
+                composable(
+                    route = Screen.MaterialAnimatedComponents.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(timeText = {}, scrollState = columnState) {
+                        SampleAnimatedComponents(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialButtonsScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleButtonScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialCardsScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleCardScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialChipsScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialChipIconWithProgressScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleChipIconWithProgressScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialCompactChipsScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleCompactChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialConfirmationScreen.route,
+                ) {
+                    ScreenScaffold(timeText = {}) {
+                        SampleConfirmationScreen()
+                    }
+                }
+                composable(
+                    route = Screen.MaterialConfirmationLauncher.route,
+                ) {
+                    ScreenScaffold(timeText = {}) {
+                        SampleConfirmationLauncher()
+                    }
+                }
+                composable(
+                    route = Screen.MaterialIconScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleIconScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialOutlinedChipScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleOutlinedChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialOutlinedCompactChipScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleOutlinedCompactChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialSplitToggleChipScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleSplitToggleChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialStepperScreen.route,
+                ) {
+                    SampleStepperScreen()
+                }
+                composable(
+                    route = Screen.MaterialTitleScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleTitleScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialResponsiveListHeader.route
+                ) {
+                    val columnState = rememberResponsiveColumnState(
+                        contentPadding = padding(
+                            first = ItemType.Text,
+                            last = ItemType.SingleButton
+                        )
+                    )
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleResponsiveListHeader(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialToggleButtonScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleToggleButtonScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.MaterialToggleChipScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SampleToggleChipScreen(columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.SectionedListMenuScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SectionedListMenuScreen(
+                            navigateToRoute = { route -> navController.navigate(route) },
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(
+                    Screen.SectionedListStatelessScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SectionedListStatelessScreen(
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(
+                    Screen.SectionedListStatefulScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SectionedListStatefulScreen(
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(
+                    Screen.SectionedListExpandableScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        SectionedListExpandableScreen(
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(
+                    route = Screen.RotaryMenuScreen.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        RotaryMenuScreen(
+                            navigateToRoute = { route -> navController.navigate(route) },
+                            columnState = columnState,
+                        )
+                    }
+                }
+                composable(route = Screen.RotaryScrollScreen.route) {
+                    ScreenScaffold(timeText = {}) {
+                        RotaryScrollScreen()
+                    }
+                }
+                composable(route = Screen.RotaryScrollReversedScreen.route) {
+                    ScreenScaffold(timeText = {}) {
+                        RotaryScrollScreen(reverseDirection = true)
+                    }
+                }
+                composable(route = Screen.RotaryScrollWithFlingScreen.route) {
+                    ScreenScaffold(timeText = {}) {
+                        RotaryScrollWithFlingOrSnapScreen(RotaryMode.Scroll)
+                    }
+                }
+                composable(route = Screen.RotarySnapListScreen.route) {
+                    ScreenScaffold(timeText = {}) {
+                        RotaryScrollWithFlingOrSnapScreen(RotaryMode.Snap)
+                    }
+                }
+                composable(
+                    route = Screen.Paging.route,
+                ) {
+                    val columnState = rememberColumnState()
+
+                    ScreenScaffold(scrollState = columnState) {
+                        PagingScreen(navController = navController, columnState = columnState)
+                    }
+                }
+                composable(
+                    route = Screen.PagingItem.route,
+                    arguments = listOf(
+                        navArgument("id") {
+                            type = NavType.IntType
+                        },
                     ),
-                )
-
-                ScreenScaffold(scrollState = columnState) {
-                    ScrollAwayScreenScalingLazyColumn(
-                        columnState = columnState,
-                    )
+                ) {
+                    PagingItemScreen(it.arguments!!.getInt("id"))
                 }
-            }
-            composable(
-                Screen.ScrollAwayColumn.route,
-            ) {
-                val scrollState = rememberScrollState()
-                ScreenScaffold(scrollState = scrollState) {
-                    ScrollAwayScreenColumn(
-                        scrollState = scrollState,
-                    )
+                composable(route = Screen.PagerScreen.route) {
+                    SamplePagerScreen(swipeToDismissBoxState)
                 }
-            }
-            composable(Screen.DatePicker.route) {
-                DatePicker(
-                    date = time.toLocalDate(),
-                    onDateConfirm = {
-                        time = time.toLocalTime().atDate(it)
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(Screen.FromDatePicker.route) {
-                val date = time.toLocalDate()
-                DatePicker(
-                    date = date,
-                    fromDate = date,
-                    onDateConfirm = {
-                        time = time.toLocalTime().atDate(it)
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(Screen.ToDatePicker.route) {
-                val date = time.toLocalDate()
-                DatePicker(
-                    date = date,
-                    toDate = date,
-                    onDateConfirm = {
-                        time = time.toLocalTime().atDate(it)
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(Screen.TimePicker.route) {
-                TimePickerWith12HourClock(
-                    time = time.toLocalTime(),
-                    onTimeConfirm = {
-                        time = time.toLocalDate().atTime(it)
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(Screen.TimeWithSecondsPicker.route) {
-                TimePicker(
-                    time = time.toLocalTime(),
-                    onTimeConfirm = {
-                        time = time.toLocalDate().atTime(it)
-                        navController.popBackStack()
-                    },
-                )
-            }
-            composable(Screen.TimeWithoutSecondsPicker.route) {
-                TimePicker(
-                    time = time.toLocalTime(),
-                    onTimeConfirm = {
-                        time = time.toLocalDate().atTime(it)
-                        navController.popBackStack()
-                    },
-                    showSeconds = false,
-                )
-            }
-            composable(
-                route = Screen.MaterialAlertDialog.route,
-            ) {
-                SampleAlertDialog()
-            }
-            composable(
-                route = Screen.MaterialAnimatedComponents.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(timeText = {}, scrollState = columnState) {
-                    SampleAnimatedComponents(columnState = columnState)
+                composable(route = Screen.VerticalPagerScreen.route) {
+                    SampleVerticalPagerScreen(swipeToDismissBoxState)
                 }
-            }
-            composable(
-                route = Screen.MaterialButtonsScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleButtonScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialCardsScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleCardScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialChipsScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialChipIconWithProgressScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleChipIconWithProgressScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialCompactChipsScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleCompactChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialConfirmationScreen.route,
-            ) {
-                ScreenScaffold(timeText = {}) {
-                    SampleConfirmationScreen()
-                }
-            }
-            composable(
-                route = Screen.MaterialConfirmationLauncher.route,
-            ) {
-                ScreenScaffold(timeText = {}) {
-                    SampleConfirmationLauncher()
-                }
-            }
-            composable(
-                route = Screen.MaterialIconScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleIconScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialOutlinedChipScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleOutlinedChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialOutlinedCompactChipScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleOutlinedCompactChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialSplitToggleChipScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleSplitToggleChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialStepperScreen.route,
-            ) {
-                SampleStepperScreen()
-            }
-            composable(
-                route = Screen.MaterialTitleScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleTitleScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialToggleButtonScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleToggleButtonScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.MaterialToggleChipScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SampleToggleChipScreen(columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.SectionedListMenuScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SectionedListMenuScreen(
-                        navigateToRoute = { route -> navController.navigate(route) },
-                        columnState = columnState,
-                    )
-                }
-            }
-            composable(
-                Screen.SectionedListStatelessScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SectionedListStatelessScreen(
-                        columnState = columnState,
-                    )
-                }
-            }
-            composable(
-                Screen.SectionedListStatefulScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SectionedListStatefulScreen(
-                        columnState = columnState,
-                    )
-                }
-            }
-            composable(
-                Screen.SectionedListExpandableScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    SectionedListExpandableScreen(
-                        columnState = columnState,
-                    )
-                }
-            }
-            composable(
-                route = Screen.RotaryMenuScreen.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    RotaryMenuScreen(
-                        navigateToRoute = { route -> navController.navigate(route) },
-                        columnState = columnState,
-                    )
-                }
-            }
-            composable(route = Screen.RotaryScrollScreen.route) {
-                ScreenScaffold(timeText = {}) {
-                    RotaryScrollScreen()
-                }
-            }
-            composable(route = Screen.RotaryScrollReversedScreen.route) {
-                ScreenScaffold(timeText = {}) {
-                    RotaryScrollScreen(reverseDirection = true)
-                }
-            }
-            composable(route = Screen.RotaryScrollWithFlingScreen.route) {
-                ScreenScaffold(timeText = {}) {
-                    RotaryScrollWithFlingOrSnapScreen(RotaryMode.Scroll)
-                }
-            }
-            composable(route = Screen.RotarySnapListScreen.route) {
-                ScreenScaffold(timeText = {}) {
-                    RotaryScrollWithFlingOrSnapScreen(RotaryMode.Snap)
-                }
-            }
-            composable(
-                route = Screen.Paging.route,
-            ) {
-                val columnState = rememberColumnState()
-
-                ScreenScaffold(scrollState = columnState) {
-                    PagingScreen(navController = navController, columnState = columnState)
-                }
-            }
-            composable(
-                route = Screen.PagingItem.route,
-                arguments = listOf(
-                    navArgument("id") {
-                        type = NavType.IntType
-                    },
-                ),
-            ) {
-                PagingItemScreen(it.arguments!!.getInt("id"))
-            }
-            composable(route = Screen.PagerScreen.route) {
-                SamplePagerScreen(swipeToDismissBoxState)
-            }
-            composable(route = Screen.VerticalPagerScreen.route) {
-                SampleVerticalPagerScreen(swipeToDismissBoxState)
             }
         }
     }

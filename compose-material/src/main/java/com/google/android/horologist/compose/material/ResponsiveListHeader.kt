@@ -32,6 +32,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.ContentAlpha
+import androidx.wear.compose.material.LocalContentAlpha
 import androidx.wear.compose.material.LocalContentColor
 import androidx.wear.compose.material.LocalTextStyle
 import androidx.wear.compose.material.MaterialTheme
@@ -54,7 +56,7 @@ public fun ResponsiveListHeader(
     ) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
-            LocalTextStyle provides MaterialTheme.typography.button,
+            LocalTextStyle provides MaterialTheme.typography.button
         ) {
             content()
         }

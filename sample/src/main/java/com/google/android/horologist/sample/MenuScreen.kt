@@ -222,6 +222,13 @@ fun MenuScreen(
             }
             item {
                 Chip(
+                    label = stringResource(id = R.string.sample_material_responsive_header),
+                    modifier = modifier.fillMaxWidth(),
+                    onClick = { navigateToRoute(Screen.MaterialResponsiveListHeader.route) },
+                )
+            }
+            item {
+                Chip(
                     label = stringResource(id = R.string.sample_material_toggle_button),
                     modifier = modifier.fillMaxWidth(),
                     onClick = { navigateToRoute(Screen.MaterialToggleButtonScreen.route) },

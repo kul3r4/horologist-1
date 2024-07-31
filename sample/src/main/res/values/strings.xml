@@ -38,6 +38,7 @@
     <string name="sample_material_split_toggle_chips">Material Split Toggle Chips</string>
     <string name="sample_material_stepper">Material Stepper</string>
     <string name="sample_material_title">Material Titles</string>
+    <string name="sample_material_responsive_header">Material Responsive Header</string>
     <string name="sample_material_toggle_button">Material Toggle Buttons</string>
     <string name="sample_material_toggle_chip">Material Toggle Chips</string>
 

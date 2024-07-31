@@ -48,6 +48,7 @@ sealed class Screen(
     object MaterialSplitToggleChipScreen : Screen("materialSplitToggleChipScreen")
     object MaterialStepperScreen : Screen("materialStepperScreen")
     object MaterialTitleScreen : Screen("materialTitleScreen")
+    object MaterialResponsiveListHeader : Screen("materialResponsiveListHeader")
     object MaterialToggleButtonScreen : Screen("materialToggleButtonScreen")
     object MaterialToggleChipScreen : Screen("materialToggleChipScreen")
 
