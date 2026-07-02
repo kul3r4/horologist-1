@@ -16,29 +16,21 @@
 
 package com.google.android.horologist.mediasample.ui.auth.prompt
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
-import androidx.wear.compose.material3.ConfirmationDialogDefaults
-import androidx.wear.compose.material3.Dialog
+import androidx.wear.compose.material3.ConfirmationDialog
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
@@ -48,7 +40,6 @@ import com.google.android.horologist.auth.ui.material3.common.screens.prompt.Sig
 import com.google.android.horologist.media.ui.material3.navigation.CustomRoute
 import com.google.android.horologist.mediasample.R
 import com.google.android.horologist.mediasample.ui.navigation.UampNavigationScreen
-import kotlinx.coroutines.delay
 
 @Composable
 fun GoogleSignInPromptScreen(
@@ -85,39 +76,24 @@ fun GoogleSignInPromptScreen(
         }
     }
 
-    if (showAlreadySignedInDialog) {
-        val durationMillis = ConfirmationDialogDefaults.DurationMillis
-        LaunchedEffect(showAlreadySignedInDialog) {
-            delay(durationMillis)
+    ConfirmationDialog(
+        visible = showAlreadySignedInDialog,
+        onDismissRequest = {
             showAlreadySignedInDialog = false
             backStack.removeLastOrNull()
-        }
-
-        Dialog(
-            visible = showAlreadySignedInDialog,
-            onDismissRequest = {
-                showAlreadySignedInDialog = false
-                backStack.removeLastOrNull()
-            },
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(48.dp),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.google_sign_in_prompt_already_signed_in_message),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-        }
+        },
+        text = {
+            Text(
+                textAlign = TextAlign.Center,
+                text = stringResource(id = R.string.google_sign_in_prompt_already_signed_in_message),
+            )
+        },
+    ) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(48.dp),
+        )
     }
 }
