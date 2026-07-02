@@ -16,6 +16,7 @@
 
 package com.google.android.horologist.mediasample.ui.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnScope
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.ListHeader
@@ -31,6 +33,7 @@ import androidx.wear.compose.material3.ListHeaderDefaults
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.TransformationSpec
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import com.google.android.horologist.media.ui.material3.navigation.CustomRoute
@@ -69,151 +72,85 @@ fun DeveloperOptionsScreen(
                     Text(text = stringResource(id = R.string.sample_developer_options))
                 }
             }
-            item {
-                ActionSetting(
-                    text = "New Hotness Player",
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    backStack.add(CustomRoute(NewHotness.navRoute))
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                text = "New Hotness Player",
+            ) {
+                backStack.add(CustomRoute(NewHotness.navRoute))
             }
-            item {
-                CheckedSetting(
-                    value = uiState.networkRequest != null,
-                    text = stringResource(id = R.string.request_network),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.toggleNetworkRequest()
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.networkRequest != null,
+                textId = R.string.request_network,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.toggleNetworkRequest()
             }
-            item {
-                ActionSetting(
-                    text = stringResource(id = R.string.sample_audio_debug),
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    backStack.add(CustomRoute(AudioDebug.navRoute))
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.sample_audio_debug,
+            ) {
+                backStack.add(CustomRoute(AudioDebug.navRoute))
             }
-            item {
-                ActionSetting(
-                    text = stringResource(id = R.string.sample_samples),
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    backStack.add(CustomRoute(Samples.navRoute))
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.sample_samples,
+            ) {
+                backStack.add(CustomRoute(Samples.navRoute))
             }
-            item {
-                CheckedSetting(
-                    value = uiState.showTimeTextInfo,
-                    text = stringResource(id = R.string.show_time_text_info),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setShowTimeTextInfo(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.showTimeTextInfo,
+                textId = R.string.show_time_text_info,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setShowTimeTextInfo(it)
             }
-            item {
-                CheckedSetting(
-                    value = uiState.debugOffload,
-                    text = stringResource(id = R.string.debug_offload),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setDebugOffload(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.debugOffload,
+                textId = R.string.debug_offload,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setDebugOffload(it)
             }
-            item {
-                CheckedSetting(
-                    value = uiState.podcastControls,
-                    text = stringResource(id = R.string.podcast_controls),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setPodcastControls(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.podcastControls,
+                textId = R.string.podcast_controls,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setPodcastControls(it)
             }
-            item {
-                CheckedSetting(
-                    value = uiState.loadItemsAtStartup,
-                    text = stringResource(id = R.string.load_items),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setLoadItemsAtStartup(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.loadItemsAtStartup,
+                textId = R.string.load_items,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setLoadItemsAtStartup(it)
             }
-            item {
-                CheckedSetting(
-                    value = uiState.streamingMode,
-                    text = stringResource(id = R.string.streaming_mode),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setStreamingMode(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.streamingMode,
+                textId = R.string.streaming_mode,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setStreamingMode(it)
             }
-            item {
-                CheckedSetting(
-                    value = uiState.animated,
-                    text = stringResource(id = R.string.animated),
-                    enabled = uiState.writable,
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.setAnimated(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.animated,
+                textId = R.string.animated,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setAnimated(it)
             }
-            item {
-                ActionSetting(
-                    text = stringResource(id = R.string.force_stop),
-                    transformation = SurfaceTransformation(transformationSpec),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .transformedHeight(this, transformationSpec)
-                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
-                ) {
-                    developerOptionsScreenViewModel.forceStop()
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.force_stop,
+            ) {
+                developerOptionsScreenViewModel.forceStop()
             }
             item {
                 val message = stringResource(id = R.string.sample_error)
@@ -229,5 +166,46 @@ fun DeveloperOptionsScreen(
                 }
             }
         }
+    }
+}
+
+private fun TransformingLazyColumnScope.developerActionSetting(
+    transformationSpec: TransformationSpec,
+    @StringRes textId: Int? = null,
+    text: String? = null,
+    onClick: () -> Unit,
+) {
+    item {
+        ActionSetting(
+            text = textId?.let { stringResource(id = it) } ?: text ?: "",
+            transformation = SurfaceTransformation(transformationSpec),
+            modifier = Modifier
+                .fillMaxWidth()
+                .transformedHeight(this, transformationSpec)
+                .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+            onClick = onClick,
+        )
+    }
+}
+
+private fun TransformingLazyColumnScope.developerCheckedSetting(
+    transformationSpec: TransformationSpec,
+    value: Boolean,
+    @StringRes textId: Int,
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    item {
+        CheckedSetting(
+            value = value,
+            text = stringResource(id = textId),
+            enabled = enabled,
+            transformation = SurfaceTransformation(transformationSpec),
+            modifier = Modifier
+                .fillMaxWidth()
+                .transformedHeight(this, transformationSpec)
+                .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+            onCheckedChange = onCheckedChange,
+        )
     }
 }
