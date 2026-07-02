@@ -18,18 +18,29 @@ package com.google.android.horologist.mediasample.ui.auth.signout
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
-import androidx.wear.compose.material.CircularProgressIndicator
-import androidx.wear.compose.material.Text
-import com.google.android.horologist.compose.material.Confirmation
+import androidx.wear.compose.material3.CircularProgressIndicator
+import androidx.wear.compose.material3.ConfirmationDialog
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.Text
 import com.google.android.horologist.media.ui.material3.navigation.CustomRoute
 import com.google.android.horologist.mediasample.R
 
@@ -37,6 +48,7 @@ import com.google.android.horologist.mediasample.R
 fun GoogleSignOutScreen(
     backStack: NavBackStack<CustomRoute>,
     viewModel: UampGoogleSignOutViewModel,
+    modifier: Modifier = Modifier,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -46,21 +58,37 @@ fun GoogleSignOutScreen(
                 viewModel.onIdleStateObserved()
             }
 
-            LoadingView()
+            LoadingView(modifier = modifier)
         }
 
         GoogleSignOutScreenState.Loading -> {
-            LoadingView()
+            LoadingView(modifier = modifier)
         }
 
         GoogleSignOutScreenState.Success -> {
-            Confirmation(
-                onTimeout = { backStack.removeLastOrNull() },
+            var showConfirmation by rememberSaveable { mutableStateOf(true) }
+
+            ConfirmationDialog(
+                visible = showConfirmation,
+                onDismissRequest = {
+                    showConfirmation = false
+                    backStack.removeLastOrNull()
+                },
+                modifier = modifier,
+                text = {
+                    Text(
+                        textAlign = TextAlign.Center,
+                        text = stringResource(id = R.string.google_sign_out_success_message),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
             ) {
-                Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.google_sign_out_success_message),
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(48.dp),
                 )
             }
         }
@@ -74,11 +102,17 @@ fun GoogleSignOutScreen(
 }
 
 @Composable
-private fun LoadingView() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator()
+private fun LoadingView(modifier: Modifier = Modifier) {
+    ScreenScaffold(
+        modifier = modifier,
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }

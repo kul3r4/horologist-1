@@ -16,21 +16,26 @@
 
 package com.google.android.horologist.mediasample.ui.settings
 
-import androidx.compose.foundation.layout.padding
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
-import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.padding
-import com.google.android.horologist.compose.layout.ScreenScaffold
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumnScope
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.ListHeaderDefaults
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.TransformationSpec
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
 import com.google.android.horologist.media.ui.material3.navigation.CustomRoute
 import com.google.android.horologist.mediasample.R
 import com.google.android.horologist.mediasample.ui.navigation.UampNavigationScreen.AudioDebug
@@ -45,124 +50,162 @@ fun DeveloperOptionsScreen(
 ) {
     val uiState by developerOptionsScreenViewModel.uiState.collectAsStateWithLifecycle()
 
-    val columnState = rememberResponsiveColumnState(
-        contentPadding = padding(
-            first = ItemType.Text,
-            last = ItemType.Chip,
-        ),
-    )
+    val transformationSpec = rememberTransformationSpec()
+    val columnState = rememberTransformingLazyColumnState()
 
-    ScreenScaffold(scrollState = columnState) {
-        ScalingLazyColumn(
-            columnState = columnState,
-            modifier = modifier,
+    ScreenScaffold(
+        scrollState = columnState,
+        modifier = modifier,
+    ) { contentPadding ->
+        TransformingLazyColumn(
+            state = columnState,
+            contentPadding = contentPadding,
         ) {
             item {
-                Text(
-                    text = stringResource(id = R.string.sample_developer_options),
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    style = MaterialTheme.typography.title3,
-                )
-            }
-            item {
-                ActionSetting(
-                    "New Hotness Player",
+                ListHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ListHeaderDefaults.minimumTopListContentPadding),
+                    transformation = SurfaceTransformation(transformationSpec),
                 ) {
-                    backStack.add(CustomRoute(NewHotness.navRoute))
+                    Text(text = stringResource(id = R.string.sample_developer_options))
                 }
             }
-            item {
-                CheckedSetting(
-                    uiState.networkRequest != null,
-                    stringResource(id = R.string.request_network),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.toggleNetworkRequest()
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                text = "New Hotness Player",
+            ) {
+                backStack.add(CustomRoute(NewHotness.navRoute))
             }
-            item {
-                ActionSetting(
-                    stringResource(id = R.string.sample_audio_debug),
-                ) {
-                    backStack.add(CustomRoute(AudioDebug.navRoute))
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.networkRequest != null,
+                textId = R.string.request_network,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.toggleNetworkRequest()
             }
-            item {
-                ActionSetting(
-                    stringResource(id = R.string.sample_samples),
-                ) {
-                    backStack.add(CustomRoute(Samples.navRoute))
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.sample_audio_debug,
+            ) {
+                backStack.add(CustomRoute(AudioDebug.navRoute))
             }
-            item {
-                CheckedSetting(
-                    uiState.showTimeTextInfo,
-                    stringResource(id = R.string.show_time_text_info),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setShowTimeTextInfo(it)
-                }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.sample_samples,
+            ) {
+                backStack.add(CustomRoute(Samples.navRoute))
             }
-            item {
-                CheckedSetting(
-                    uiState.debugOffload,
-                    stringResource(id = R.string.debug_offload),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setDebugOffload(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.showTimeTextInfo,
+                textId = R.string.show_time_text_info,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setShowTimeTextInfo(it)
             }
-            item {
-                CheckedSetting(
-                    uiState.podcastControls,
-                    stringResource(id = R.string.podcast_controls),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setPodcastControls(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.debugOffload,
+                textId = R.string.debug_offload,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setDebugOffload(it)
             }
-            item {
-                CheckedSetting(
-                    uiState.loadItemsAtStartup,
-                    stringResource(id = R.string.load_items),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setLoadItemsAtStartup(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.podcastControls,
+                textId = R.string.podcast_controls,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setPodcastControls(it)
             }
-            item {
-                CheckedSetting(
-                    uiState.streamingMode,
-                    stringResource(id = R.string.streaming_mode),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setStreamingMode(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.loadItemsAtStartup,
+                textId = R.string.load_items,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setLoadItemsAtStartup(it)
             }
-            item {
-                CheckedSetting(
-                    uiState.animated,
-                    stringResource(id = R.string.animated),
-                    enabled = uiState.writable,
-                ) {
-                    developerOptionsScreenViewModel.setAnimated(it)
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.streamingMode,
+                textId = R.string.streaming_mode,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setStreamingMode(it)
             }
-            item {
-                ActionSetting(
-                    text = stringResource(id = R.string.force_stop),
-                ) {
-                    developerOptionsScreenViewModel.forceStop()
-                }
+            developerCheckedSetting(
+                transformationSpec = transformationSpec,
+                value = uiState.animated,
+                textId = R.string.animated,
+                enabled = uiState.writable,
+            ) {
+                developerOptionsScreenViewModel.setAnimated(it)
+            }
+            developerActionSetting(
+                transformationSpec = transformationSpec,
+                textId = R.string.force_stop,
+            ) {
+                developerOptionsScreenViewModel.forceStop()
             }
             item {
                 val message = stringResource(id = R.string.sample_error)
                 ActionSetting(
-                    stringResource(id = R.string.show_test_dialog),
+                    text = stringResource(id = R.string.show_test_dialog),
+                    transformation = SurfaceTransformation(transformationSpec),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec)
+                        .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
                 ) {
                     developerOptionsScreenViewModel.showDialog(message)
                 }
             }
         }
+    }
+}
+
+private fun TransformingLazyColumnScope.developerActionSetting(
+    transformationSpec: TransformationSpec,
+    @StringRes textId: Int? = null,
+    text: String? = null,
+    onClick: () -> Unit,
+) {
+    item {
+        ActionSetting(
+            text = textId?.let { stringResource(id = it) } ?: text ?: "",
+            transformation = SurfaceTransformation(transformationSpec),
+            modifier = Modifier
+                .fillMaxWidth()
+                .transformedHeight(this, transformationSpec)
+                .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+            onClick = onClick,
+        )
+    }
+}
+
+private fun TransformingLazyColumnScope.developerCheckedSetting(
+    transformationSpec: TransformationSpec,
+    value: Boolean,
+    @StringRes textId: Int,
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    item {
+        CheckedSetting(
+            value = value,
+            text = stringResource(id = textId),
+            enabled = enabled,
+            transformation = SurfaceTransformation(transformationSpec),
+            modifier = Modifier
+                .fillMaxWidth()
+                .transformedHeight(this, transformationSpec)
+                .minimumVerticalContentPadding(ButtonDefaults.minimumVerticalListContentPadding),
+            onCheckedChange = onCheckedChange,
+        )
     }
 }

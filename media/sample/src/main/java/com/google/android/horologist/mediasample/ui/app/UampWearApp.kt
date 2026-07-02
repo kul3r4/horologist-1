@@ -45,6 +45,7 @@ import com.google.android.horologist.media.ui.material3.navigation.MediaNavContr
 import com.google.android.horologist.media.ui.material3.navigation.MediaPlayerScaffold
 import com.google.android.horologist.mediasample.BuildConfig
 import com.google.android.horologist.mediasample.ui.auth.prompt.GoogleSignInPromptScreen
+import com.google.android.horologist.mediasample.ui.auth.prompt.UampSignInPromptViewModel
 import com.google.android.horologist.mediasample.ui.auth.signin.UampGoogleSignInViewModel
 import com.google.android.horologist.mediasample.ui.auth.signout.GoogleSignOutScreen
 import com.google.android.horologist.mediasample.ui.browse.UampBrowseScreen
@@ -58,7 +59,6 @@ import com.google.android.horologist.mediasample.ui.entity.UampEntityScreenViewM
 import com.google.android.horologist.mediasample.ui.entity.UampStreamingPlaylistScreen
 import com.google.android.horologist.mediasample.ui.entity.UampStreamingPlaylistScreenViewModel
 import com.google.android.horologist.mediasample.ui.navigation.UampNavigationScreen
-import com.google.android.horologist.mediasample.ui.newhotness.NewHotnessPlayerScreen
 import com.google.android.horologist.mediasample.ui.player.UampMediaPlayerScreen
 import com.google.android.horologist.mediasample.ui.playlists.UampPlaylistsScreen
 import com.google.android.horologist.mediasample.ui.settings.DeveloperOptionsScreen
@@ -219,7 +219,7 @@ fun UampWearApp(
                 entry(CustomRoute(UampNavigationScreen.GoogleSignInPromptScreen.navRoute)) {
                     GoogleSignInPromptScreen(
                         backStack = backStack as NavBackStack<CustomRoute>,
-                        viewModel = hiltViewModel(),
+                        viewModel = hiltViewModel< UampSignInPromptViewModel>(),
                     )
                 }
 
@@ -236,10 +236,6 @@ fun UampWearApp(
                         backStack = backStack as NavBackStack<CustomRoute>,
                         viewModel = hiltViewModel(),
                     )
-                }
-
-                entry(CustomRoute(UampNavigationScreen.NewHotness.navRoute)) {
-                    NewHotnessPlayerScreen()
                 }
             },
         )
