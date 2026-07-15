@@ -15,7 +15,9 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.horologist.mediasample">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="androidx.glance.wear.core,androidx.glance.wear,androidx.glance,androidx.compose.remote.player.core,androidx.compose.remote.player,androidx.compose.remote.creation.compose,androidx.compose.remote.creation,androidx.compose.remote.core,androidx.compose.remote,androidx.wear.compose.remote.material3,androidx.wear.compose.remote" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -115,6 +117,26 @@
             <intent-filter>
                 <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
             </intent-filter>
+
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@mipmap/ic_horologist" />
+        </service>
+
+        <service
+            android:name=".data.service.tile.MediaCollectionsWidgetService"
+            android:description="@string/sample_app_name"
+            android:exported="true"
+            android:icon="@mipmap/ic_horologist"
+            android:label="@string/sample_app_name"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.glance.wear.action.BIND_WIDGET_PROVIDER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="androidx.glance.wear.widget.provider"
+                android:resource="@xml/media_collections_widget_info" />
 
             <meta-data
                 android:name="androidx.wear.tiles.PREVIEW"

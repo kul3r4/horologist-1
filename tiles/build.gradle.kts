@@ -67,6 +67,7 @@ dependencies {
   api(projects.annotations)
 
   implementation(libs.kotlin.stdlib)
+  implementation(libs.androidx.activity.compose)
 
   implementation(libs.androidx.wear)
   implementation(libs.androidx.lifecycle.runtime)
