@@ -15,9 +15,8 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="com.google.android.horologist.mediasample">
 
-    <uses-sdk tools:overrideLibrary="androidx.glance.wear.core,androidx.glance.wear,androidx.glance,androidx.compose.remote.player.core,androidx.compose.remote.player,androidx.compose.remote.creation.compose,androidx.compose.remote.creation,androidx.compose.remote.core,androidx.compose.remote,androidx.wear.compose.remote.material3,androidx.wear.compose.remote" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
