@@ -16,6 +16,7 @@
 
 package com.google.android.horologist.mediasample.data.service.tile
 
+import androidx.glance.wear.AssociateWithGlanceWearWidget
 import androidx.glance.wear.GlanceWearWidget
 import androidx.glance.wear.GlanceWearWidgetService
 import coil.ImageLoader
@@ -27,6 +28,7 @@ import javax.inject.Inject
  * A Widget Service providing glanceable media collections (playlist, album) as part of a
  * dual-service architecture alongside [MediaCollectionsTileService].
  */
+@AssociateWithGlanceWearWidget(MediaCollectionsWidget::class)
 @AndroidEntryPoint
 class MediaCollectionsWidgetService : GlanceWearWidgetService() {
 
