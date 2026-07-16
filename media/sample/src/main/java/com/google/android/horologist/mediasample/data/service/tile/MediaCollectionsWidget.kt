@@ -51,6 +51,7 @@ import coil.ImageLoader
 import com.google.android.horologist.media.repository.PlaylistRepository
 import com.google.android.horologist.mediasample.ui.app.MediaActivity
 import kotlinx.coroutines.flow.first
+import android.annotation.SuppressLint
 import androidx.compose.remote.creation.compose.action.Action
 import androidx.compose.ui.graphics.ImageBitmap
 import coil.request.ImageRequest
@@ -92,7 +93,7 @@ class MediaCollectionsWidget(
         }
         val playlistArtwork = artworkBitmap?.asImageBitmap()
 
-      val remoteColorScheme = RemoteColorScheme()
+        val remoteColorScheme = RemoteColorScheme()
         return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.primary)) {
             WidgetContent(
                 playlistName = firstPlaylist.name,
@@ -103,6 +104,7 @@ class MediaCollectionsWidget(
     }
 }
 
+@SuppressLint("RestrictedApi")
 @RemoteComposable
 @Composable
 fun WidgetContent(
