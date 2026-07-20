@@ -238,15 +238,16 @@ private fun PlaylistButton(
             containerColor = RemoteMaterialTheme.colorScheme.secondaryContainer,
             contentColor = RemoteMaterialTheme.colorScheme.onSecondaryContainer,
         ),
-    ) {
-        if (playlistArtwork != null) {
+        icon = {
+          if (playlistArtwork != null) {
             RemoteImage(
-                bitmap = playlistArtwork,
-                contentDescription = "Artwork".rs,
-                modifier = RemoteModifier.size(imageSize),
+                  bitmap = playlistArtwork,
+                  contentDescription = "Artwork".rs,
+                  modifier = RemoteModifier.size(imageSize),
             )
-            RemoteBox(modifier = RemoteModifier.width(8.rdp))
-        }
+          }
+        },
+    ) {
         RemoteText(
             text = playlistName.rs,
             style = textStyle,
