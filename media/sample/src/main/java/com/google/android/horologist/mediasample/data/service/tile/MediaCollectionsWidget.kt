@@ -51,10 +51,10 @@ import androidx.glance.wear.WearWidgetBrush
 import androidx.glance.wear.WearWidgetData
 import androidx.glance.wear.WearWidgetDocument
 import androidx.glance.wear.color
+import androidx.glance.wear.core.ContainerInfo
 import androidx.glance.wear.core.WearWidgetParams
 import androidx.wear.compose.remote.material3.RemoteButton
 import androidx.wear.compose.remote.material3.RemoteButtonDefaults
-import androidx.wear.compose.remote.material3.RemoteColorScheme
 import androidx.wear.compose.remote.material3.RemoteMaterialTheme
 import androidx.wear.compose.remote.material3.RemoteText
 import coil.ImageLoader
@@ -77,7 +77,6 @@ class MediaCollectionsWidget(
     ): WearWidgetData {
         val playlists = playlistRepository.getAll().first().take(2)
         val firstPlaylist = playlists.firstOrNull()
-        val remoteColorScheme = RemoteColorScheme()
 
         if (firstPlaylist == null) {
             return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.surfaceContainerLow)) {
@@ -96,27 +95,27 @@ class MediaCollectionsWidget(
             }
         }
 
-        val playlist1PendingIntent = createPlaylistPendingIntent(context, 1, firstPlaylist.id)
-        val artwork1Bitmap = loadArtworkBitmap(context, firstPlaylist.artworkUri)
-        val playlist1Artwork = artwork1Bitmap?.asImageBitmap()
+        val firstPlaylistPendingIntent = createPlaylistPendingIntent(context, 1, firstPlaylist.id)
+        val firstPlaylistArtworkBitmap = firstPlaylist.artworkUri?.let { loadArtworkBitmap(context, it) }
+        val firstPlaylistArtwork = firstPlaylistArtworkBitmap?.asImageBitmap()
 
         val secondPlaylist = playlists.getOrNull(1)
-        val playlist2PendingIntent = secondPlaylist?.let { playlist ->
+        val secondPlaylistsPendingIntent = secondPlaylist?.let { playlist ->
             createPlaylistPendingIntent(context, 2, playlist.id)
         }
-        val artwork2Bitmap = loadArtworkBitmap(context, secondPlaylist?.artworkUri)
-        val playlist2Artwork = artwork2Bitmap?.asImageBitmap()
+        val secondPlaylistArtworkBitmap = secondPlaylist?.artworkUri?.let { loadArtworkBitmap(context, it) }
+        val secondPlaylistArtwork = secondPlaylistArtworkBitmap?.asImageBitmap()
 
-        val isLargeContainer = params.containerType == CONTAINER_TYPE_LARGE || params.heightDp >= WIDGET_HEIGHT_BREAKPOINT_DP
+        val isLargeContainer = params.containerType == ContainerInfo.CONTAINER_TYPE_LARGE
 
         return WearWidgetDocument(background = WearWidgetBrush.color(remoteColorScheme.surfaceContainerLow)) {
             WidgetContent(
                 playlistName = firstPlaylist.name,
-                playlistAction = pendingIntentAction { _ -> playlist1PendingIntent },
-                playlistArtwork = playlist1Artwork,
-                playlist2Name = secondPlaylist?.name,
-                playlist2Action = playlist2PendingIntent?.let { pendingIntentAction { _ -> it } },
-                playlist2Artwork = playlist2Artwork,
+                playlistAction = pendingIntentAction { _ -> firstPlaylistPendingIntent },
+                playlistArtwork = firstPlaylistArtwork,
+                secondPlaylistName = secondPlaylist?.name,
+                secondPlaylistAction = secondPlaylistsPendingIntent?.let { pendingIntentAction { _ -> it } },
+                secondPlaylistArtwork = secondPlaylistArtwork,
                 heightDp = params.heightDp,
                 isLarge = isLargeContainer,
             )
@@ -125,17 +124,16 @@ class MediaCollectionsWidget(
 
     private suspend fun loadArtworkBitmap(
         context: Context,
-        artworkUri: String?,
-    ): Bitmap? =
-        artworkUri?.let { uri ->
-            val request = ImageRequest.Builder(context)
-                .data(uri)
-                .size(48)
-                .allowHardware(false)
-                .build()
-            val result = imageLoader.execute(request)
-            (result.drawable as? BitmapDrawable)?.bitmap
-        }
+        artworkUri: String,
+    ): Bitmap? {
+        val request = ImageRequest.Builder(context)
+            .data(artworkUri)
+            .size(ARTWORK_SIZE)
+            .allowHardware(false)
+            .build()
+        val result = imageLoader.execute(request)
+        return (result.drawable as? BitmapDrawable)?.bitmap
+    }
 
     private fun createPlaylistPendingIntent(
         context: Context,
@@ -155,6 +153,7 @@ class MediaCollectionsWidget(
     companion object {
         const val WIDGET_HEIGHT_BREAKPOINT_DP = 80f
         const val CONTAINER_TYPE_LARGE = 1
+        private const val ARTWORK_SIZE = 48
     }
 }
 
@@ -162,18 +161,18 @@ class MediaCollectionsWidget(
 @RemoteComposable
 @Composable
 fun WidgetContent(
-    playlistName: String,
-    playlistAction: Action,
-    playlistArtwork: ImageBitmap?,
-    playlist2Name: String? = null,
-    playlist2Action: Action? = null,
-    playlist2Artwork: ImageBitmap? = null,
-    heightDp: Float = 0f,
-    isLarge: Boolean = (heightDp >= MediaCollectionsWidget.WIDGET_HEIGHT_BREAKPOINT_DP),
+  playlistName: String,
+  playlistAction: Action,
+  playlistArtwork: ImageBitmap?,
+  secondPlaylistName: String? = null,
+  secondPlaylistAction: Action? = null,
+  secondPlaylistArtwork: ImageBitmap? = null,
+  heightDp: Float = 0f,
+  isLarge: Boolean = (heightDp >= MediaCollectionsWidget.WIDGET_HEIGHT_BREAKPOINT_DP),
 ) {
-    val showSecondPlaylist = (isLarge || heightDp >= MediaCollectionsWidget.WIDGET_HEIGHT_BREAKPOINT_DP) &&
-        playlist2Name != null &&
-        playlist2Action != null
+    val showSecondPlaylist = isLarge &&
+        secondPlaylistName != null &&
+        secondPlaylistAction != null
 
     val containerPadding = if (showSecondPlaylist) 4.rdp else 2.rdp
     val imageSize = if (showSecondPlaylist) 36.rdp else 48.rdp
@@ -199,9 +198,9 @@ fun WidgetContent(
                 )
                 RemoteBox(modifier = RemoteModifier.height(2.rdp))
                 PlaylistButton(
-                    playlistName = playlist2Name,
-                    playlistAction = playlist2Action,
-                    playlistArtwork = playlist2Artwork,
+                    playlistName = secondPlaylistName,
+                    playlistAction = secondPlaylistAction,
+                    playlistArtwork = secondPlaylistArtwork,
                     imageSize = imageSize,
                     textStyle = textStyle,
                     modifier = RemoteModifier.fillMaxWidth().weight(1f),
@@ -227,13 +226,13 @@ private fun PlaylistButton(
     playlistName: String,
     playlistAction: Action,
     playlistArtwork: ImageBitmap?,
+    modifier: RemoteModifier = RemoteModifier,
     imageSize: RemoteDp = 40.rdp,
-    modifier: RemoteModifier = RemoteModifier.fillMaxWidth(),
     textStyle: RemoteTextStyle = RemoteMaterialTheme.typography.titleMedium,
 ) {
     RemoteButton(
         onClick = playlistAction,
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         contentPadding = RemotePaddingValues(horizontal = 6.rdp, vertical = 4.rdp),
         colors = RemoteButtonDefaults.buttonColors(
             containerColor = RemoteMaterialTheme.colorScheme.secondaryContainer,
