@@ -182,21 +182,20 @@ fun WidgetContent(
         modifier = RemoteModifier.fillMaxSize().padding(containerPadding),
         contentAlignment = RemoteAlignment.Center,
     ) {
-        if (showSecondPlaylist) {
-            RemoteColumn(
-                horizontalAlignment = RemoteAlignment.CenterHorizontally,
-                verticalArrangement = RemoteArrangement.Center,
-                modifier = RemoteModifier.fillMaxSize(),
-            ) {
-                PlaylistButton(
-                    playlistName = playlistName,
-                    playlistAction = playlistAction,
-                    playlistArtwork = playlistArtwork,
-                    imageSize = imageSize,
-                    textStyle = textStyle,
-                    modifier = RemoteModifier.fillMaxWidth().weight(1f),
-                )
-                RemoteBox(modifier = RemoteModifier.height(2.rdp))
+        RemoteColumn(
+            horizontalAlignment = RemoteAlignment.CenterHorizontally,
+            verticalArrangement = RemoteArrangement.spacedBy(2.rdp, RemoteAlignment.CenterVertically),
+            modifier = RemoteModifier.fillMaxSize(),
+        ) {
+            PlaylistButton(
+                playlistName = playlistName,
+                playlistAction = playlistAction,
+                playlistArtwork = playlistArtwork,
+                imageSize = imageSize,
+                textStyle = textStyle,
+                modifier = if (showSecondPlaylist) RemoteModifier.fillMaxWidth().weight(1f) else RemoteModifier.fillMaxSize(),
+            )
+            if (showSecondPlaylist) {
                 PlaylistButton(
                     playlistName = secondPlaylistName,
                     playlistAction = secondPlaylistAction,
@@ -206,15 +205,6 @@ fun WidgetContent(
                     modifier = RemoteModifier.fillMaxWidth().weight(1f),
                 )
             }
-        } else {
-            PlaylistButton(
-                playlistName = playlistName,
-                playlistAction = playlistAction,
-                playlistArtwork = playlistArtwork,
-                imageSize = imageSize,
-                textStyle = textStyle,
-                modifier = RemoteModifier.fillMaxSize(),
-            )
         }
     }
 }
